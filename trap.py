@@ -1,21 +1,10 @@
 import sys
-import numpy as np
+from trap_map import TrapMap
 
 """
 Construction of Trapezoidal Map
 Authors: Daria Chaplin, Owen Sullivan, Collin Tod
 """
-
-
-def get_traversal(point):
-    # TODO
-    return ""
-
-
-def construct_map(ll_bound, ur_bound, line_segments):
-    # TODO
-    return None
-
 
 def main():
     fp = open(sys.argv[1])
@@ -34,7 +23,8 @@ def main():
                 (coords[2], coords[3])))
 
     # Build trapezoidal map with randomized incremental algorithm
-    trapezoidal_map = construct_map(ll_bound, ur_bound, line_segments)
+    # FIXME: line_segments shouldn't only be the first element, remove slice once hard case is implemented
+    trap_map = TrapMap(line_segments[:1], ll_bound, ur_bound)
 
     # Accept user-input points and print map traversal
     print("Trapezoidal map built.")
@@ -46,7 +36,10 @@ def main():
         if user_input == "quit":
             break
 
-        print(get_traversal((coords.split(" ")[0], coords.split(" ")[1])))
+        # split then cast the user's input
+        x, y = map(int, user_input.split(" "))
+
+        print(trap_map.path_to((x, y)))
 
 
 if __name__ == "__main__":

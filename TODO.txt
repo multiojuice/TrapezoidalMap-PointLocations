@@ -1,0 +1,5 @@
+Things still todo:
+	- Possibly make base_node into a superclass or something
+	- Add __str__ to all nodes
+	- Implement the hard case
+
