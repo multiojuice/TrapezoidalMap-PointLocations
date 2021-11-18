@@ -83,6 +83,7 @@ class TrapMap:
             right_leaf = Leaf(up=leaf1.up, down=leaf1.down, right=leaf1.right, left=p2)
             left_leaf = Leaf(up=leaf1.up, down= leaf1.down, right=p1, left=leaf1.left)
 
+            # TODO there HAS to be a neater way of doing this
             # Set neighbors of the left leaf
             left_leaf.left_top = leaf1.left_top
             left_leaf.left_bot = leaf1.left_bot
@@ -135,36 +136,125 @@ class TrapMap:
             leaf_begin = leaf1
             leaf_end = leaf2
 
-            # TODO split up leaf_begin
-
             # The leftmost trapezoid of the single endpoint split
             # Has all the same bounds as leaf_begin except a new right point
             leaf_leftmost = Leaf(up=leaf_begin.up, down=leaf_begin.down,
                                  left=leaf_begin.left, right=p1)
 
-            # The top of the single endpoint split
-            leaf_begin_top = Leaf(up=leaf_begin.up, down=segment,
-                                  left=p1, right = leaf_begin.right)
+            # The top of the single endpoint split. May be merged with new
+            # leaves on the right
+            merge_top = Leaf(up=leaf_begin.up, down=segment,
+                             left=p1, right = None)
 
-            # The bottom of the single endpoint split
-            leaf_begin_bot = Leaf(up=segment, down=leaf_begin.down,
-                                  left=p1, right = leaf_begin.right)
+            # The bottom of the single endpoint split. May be merged with new
+            # leaves on the right
+            merge_bot = Leaf(up=segment, down=leaf_begin.down,
+                             left=p1, right = None)
 
             # Set up neighbors for these new leaves
             leaf_leftmost.left_top = leaf_begin.left_top
             leaf_leftmost.left_bot = leaf_begin.left_bot
-            leaf_leftmost.right_top = leaf_begin_top
-            leaf_leftmost.right_bot = leaf_begin_bot
+            leaf_leftmost.right_top = merge_top
+            leaf_leftmost.right_bot = merge_bot
+
+            # Swap out old leaf's references to itself with new leftmost
+            leaf_begin.swap_on_left(leaf_leftmost)
+
+            # Mark the merge leaves as having the leftmost leaf to their left
+            merge_top.left_top = leaf_begin
+            merge_top.left_bot = leaf_begin
+            merge_bot.left_top = leaf_begin
+            merge_bot.left_bot = leaf_begin
 
             # TODO set up the tree structure for these new splits (note that
             # begin_top and begin_bot may be merged with a trapezoid to the
             # right
 
-            # TODO iterate over every leaf that seg intersects, splitting them horizontally
-                # TODO figure out if the segment is coming on top of or below the left bounding point. 
-                #      this is important because the new segment will block the
-                #      bounding point on the opposite side, meaning that it
-                #      will be merged with the previous bot/top left leaf to
-                #      this one.
-            # TODO split up leaf_end
+            # We want the first leaf to be processed (if there is one) to be
+            # the next intersecting leaf to the right of the beginning leaf
+            prev_leaf = leaf_begin
+            cur_leaf = leaf_begin.next_intersecting(segment) 
 
+            while True:
+
+                assert prev_leaf.right_top == cur_leaf or prev_leaf.right_bot == cur_leaf
+
+                # Whether we cut the section above the segment or not
+                cut_top = False
+
+                if prev_leaf.right_top != prev_leaf.right_bot:
+
+                    # If there are two right neigbors of the previous leaf,
+                    # then the segment should be on the bottom for the bounding
+                    # point to cut the top
+                    cut_top = prev_leaf.right_bot == cur_leaf
+
+                else:
+                    assert cur_leaf.left_bot == prev_leaf or cur_leaf.left_top == prev_leaf
+
+                    # If there are two left neighbors of the current leaf, the
+                    # segment should come from the bottom one in order to cut
+                    # the top section
+                    cut_top = cur_leaf.left_bot == prev_leaf
+
+
+                # Should we cut off the top section or the bottom section
+                # during this split?
+                if cut_top:
+
+                    # Mark the end of the top merge
+                    merge_top.right = cur_leaf.left
+
+                    # Save the old top to link later
+                    old_merge_top = merge_top
+
+                    # New top
+                    merge_top = Leaf(up=cur_leaf.up, down=segment,
+                                     left=cur_leaf.left, right=None)
+
+                    # TODO link up old_merge_top etc.
+                else:
+
+                    # Mark the end of the bottom merge
+                    merge_bot.right = cur_leaf.left
+
+                    # Save the old bottom that we cut off to link it later
+                    old_merge_bot = merge_bot
+
+                    # New bottom 
+                    merge_bot = Leaf(up=segment, down=cur_leaf.down,
+                                     left=cur_leaf.left, right=None)
+
+                    # TODO link up old_merge_bot etc.
+
+
+                # Now that we've merged/cut, jump out if we are at the end
+                if cur_leaf is leaf_end:
+                    break
+
+
+                # TODO construct the sub graph and replace it accordingly
+
+            leaf_rightmost = Leaf(up=leaf_end.up, down=leaf_end.down,
+                                  left=p2, right=leaf_end.right)
+
+            # Link up leaf rightmost with everything
+            leaf_end.swap_right(leaf_rightmost)
+            leaf_rightmost.right_top = leaf_end.right_top
+            leaf_rightmost.right_bot = leaf_end.right_bot
+            leaf_rightmost.left_top = merge_top
+            leaf_rightmost.left_bot = merge_bot
+            
+
+            # Cut off the two potentially merging leaves with right endpoint of
+            # segment
+            merge_top.right = p2
+            merge_bot.right = p2
+
+            # Link the merging leaves to rightmost
+            merge_top.right_top = leaf_rightmost
+            merge_top.right_bot = leaf_rightmost
+            merge_bot.right_top = leaf_rightmost
+            merge_bot.right_bot = leaf_rightmost
+
+            # TODO construct the subgraph and expand it at leaf_end in the tree

@@ -23,6 +23,10 @@ class Leaf:
                self.down == other.down and \
                self.right == other.right and \
                self.left == other.left and\
+               self.left_top == other.left_top and \
+               self.left_bot == other.left_bot and \
+               self.right_top == other.right_top and \
+               self.right_bot == other.right_bot
 
 
     def next_intersecting(self, seg: Segment):
@@ -64,12 +68,14 @@ class Leaf:
         """
         Replaces the left references to self with leaf
         """
+        # TODO fill in this function
         pass
 
     def swap_on_right(self, leaf: Leaf):
         """
         Replaces the right references to self with leaf
         """
+        # TODO fill in this function
         pass
 
     def replace_with(self, node):
