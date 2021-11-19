@@ -21,15 +21,15 @@ class Leaf:
                self.up == other.up and \
                self.down == other.down and \
                self.right == other.right and \
-               self.left == other.left and\
-               self.left_top == other.left_top and \
-               self.left_bot == other.left_bot and \
-               self.right_top == other.right_top and \
-               self.right_bot == other.right_bot
+               self.left == other.left
+               #self.left_top == other.left_top and \
+               #self.left_bot == other.left_bot and \
+               #self.right_top == other.right_top and \
+               #self.right_bot == other.right_bot
 
 
     def __str__(self):
-        return "Trap" + self.left[0] + "," + self.left[1] + "+" + self.right[0] + "," + self.right[1]
+        return "Trap" + str(self.left[0]) + "," + str(self.left[1]) + "+" + str(self.right[0]) + "," + str(self.right[1])
 
     def next_intersecting(self, seg: Segment):
         """
@@ -72,17 +72,20 @@ class Leaf:
         """
 
         assert isinstance(leaf, Leaf)
-        if self.left_top.right_top == self:
-            self.left_top.right_top = leaf
 
-        if self.left_top.right_bot == self:
-            self.left_top.right_bot = leaf
+        if self.left_top is not None:
+            if self.left_top.right_top == self:
+                self.left_top.right_top = leaf
 
-        if self.left_bot.right_top == self:
-            self.left_bot.right_top = leaf
+            if self.left_top.right_bot == self:
+                self.left_top.right_bot = leaf
 
-        if self.left_bot.right_bot == self:
-            self.left_bot.right_bot = leaf
+        if self.left_bot is not None:
+            if self.left_bot.right_top == self:
+                self.left_bot.right_top = leaf
+
+            if self.left_bot.right_bot == self:
+                self.left_bot.right_bot = leaf
 
     def swap_on_right(self, leaf):
         """
@@ -90,23 +93,29 @@ class Leaf:
         """
 
         assert isinstance(leaf, Leaf)
-        if self.right_top.left_top == self:
-            self.right_top.left_top = leaf
 
-        if self.right_top.left_bot == self:
-            self.right_top.left_bot = leaf
+        if self.right_top is not None:
+            if self.right_top.left_top == self:
+                self.right_top.left_top = leaf
 
-        if self.right_bot.left_top == self:
-            self.right_bot.left_top = leaf
+            if self.right_top.left_bot == self:
+                self.right_top.left_bot = leaf
 
-        if self.right_bot.left_bot == self:
-            self.right_bot.left_bot = leaf
+        if self.right_bot is not None:
+            if self.right_bot.left_top == self:
+                self.right_bot.left_top = leaf
+
+            if self.right_bot.left_bot == self:
+                self.right_bot.left_bot = leaf
 
     def replace_with(self, node):
         """
         Goes through all its parents and replaces itself with the new node,
         then self will end up getting garbage collected
         """
-        node.parents = self.parents
+        print("Replacing", self, "in", list(map(str,self.parents)))
+
         for p in self.parents:
             p.replace_child(self, node)
+
+        print("Replacement complete")

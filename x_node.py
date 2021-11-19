@@ -15,15 +15,17 @@ class XNode:
             self.name = "q" + XNode.newid
 
     def __str__(self):
-        return "XNODE" + self.point[0] + "," + self.point[1]
+        return "XNODE " + str(self.point[0]) + "," + str(self.point[1])
 
     def attach_right(self, node):
+        assert node is not None
+        node.parents.append(self)
         self.right = node
-        self.right.parents.append(self)
 
     def attach_left(self, node):
+        assert node is not None
+        node.parents.append(self)
         self.left = node
-        self.left.parents.append(self)
 
     def replace_child(self, old, new):
 
@@ -34,7 +36,7 @@ class XNode:
         # TODO remove these debugging statements
         if old not in (self.left, self.right):
             print(old, "is not a child of", self)
-            print("children:", (self.left, self.right))
+            print("children:", (str(self.left), str(self.right)))
 
         assert old in (self.left, self.right)
         
@@ -47,6 +49,12 @@ class XNode:
         """
         Returns the next node in the path to this point's location.
         """
+
+        if self.right is None:
+            print(self, "right is none")
+        assert self.right is not None
+        assert self.left is not None
+
         x, _ = point
         if x < self.point[0]:
             return self.left

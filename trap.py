@@ -58,7 +58,7 @@ def main():
 
     # Build trapezoidal map with randomized incremental algorithm
     # FIXME: line_segments shouldn't only be the first element, remove slice once hard case is implemented
-    trap_map = TrapMap(line_segments[:1], ll_bound, ur_bound)
+    trap_map = TrapMap(line_segments, ll_bound, ur_bound)
 
     # Accept user-input points and print map traversal
     print("Trapezoidal map built.")

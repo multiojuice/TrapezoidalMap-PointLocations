@@ -36,6 +36,7 @@ class TrapMap:
 
         node = self.root
 
+        assert node is not None
         # Traverse the tree until the correct leaf node is found
         while not isinstance(node, Leaf):
             node = node.next(point)
@@ -175,7 +176,7 @@ class TrapMap:
             left_segment_split.attach_down(merge_bot)
 
             # Replaces leaf_begin with left_endpoint_split in the tree
-            leaf_begin.replaceWith(left_endpoint_split)
+            leaf_begin.replace_with(left_endpoint_split)
 
             # We want the first leaf to be processed (if there is one) to be
             # the next intersecting leaf to the right of the beginning leaf
@@ -189,7 +190,7 @@ class TrapMap:
                 # Whether we cut the section above the segment or not
                 cut_top = False
 
-                has_two_left_neightbors = cur_leaf.left_top != cur_leaf.left_bot
+                has_two_left_neighbors = cur_leaf.left_top != cur_leaf.left_bot
 
                 if prev_leaf.right_top != prev_leaf.right_bot:
 
@@ -297,7 +298,7 @@ class TrapMap:
                                   left=p2, right=leaf_end.right)
 
             # Link up leaf rightmost with everything
-            leaf_end.swap_right(leaf_rightmost)
+            leaf_end.swap_on_right(leaf_rightmost)
 
             leaf_rightmost.right_top = leaf_end.right_top
             leaf_rightmost.right_bot = leaf_end.right_bot
@@ -318,7 +319,7 @@ class TrapMap:
 
             # Constructs the subgraph and inserts it into the tree
             right_endpoint_split = XNode(p2)
-            right_endpoint_split.atttach_right(leaf_rightmost)
+            right_endpoint_split.attach_right(leaf_rightmost)
             right_seg_split = YNode(segment)
             right_seg_split.attach_up(merge_top)
             right_seg_split.attach_down(merge_bot)
