@@ -233,7 +233,11 @@ class TrapMap:
                     break
 
 
-                # TODO construct the sub graph and replace it accordingly
+                # Constructs and inserts the new subgraph
+                seg_split = YNode(segment)
+                seg_split.attach_up(merge_top)
+                seg_split.attach_down(merge_bot)
+                cur_leaf.replace_with(seg_split)
 
             leaf_rightmost = Leaf(up=leaf_end.up, down=leaf_end.down,
                                   left=p2, right=leaf_end.right)
