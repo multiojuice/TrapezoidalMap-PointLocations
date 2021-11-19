@@ -1,9 +1,7 @@
 import sys
-import numpy as np
 from trap_map import TrapMap
 from x_node import XNode
 from y_node import YNode
-import pprint
 
 """
 Construction of Trapezoidal Map
