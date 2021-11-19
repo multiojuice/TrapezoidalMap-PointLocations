@@ -2,11 +2,11 @@ from leaf import Leaf
 import itertools
 # TODO implement __str__
 class YNode:
-    newid = itertools.count().next
+    id_iter = itertools.count()
 
     def __init__(self, segment):
         self.segment = segment
-        self.name = "s" + YNode.newid
+        self.name = "s" + next(YNode.id_iter)
 
         # Do calculations needed later for testing if points are above or below
         # this line segment

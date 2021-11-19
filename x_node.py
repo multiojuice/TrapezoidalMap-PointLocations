@@ -2,7 +2,7 @@ from leaf import Leaf
 import itertools
 
 class XNode:
-    newid = itertools.count().next
+    id_iter = itertools.count()
     def __init__(self, point, isP = True):
         self.point = point
         self.parents = []
@@ -12,7 +12,7 @@ class XNode:
         if isP:
             self.name = "p" + XNode.newid
         else:
-            self.name = "q" + XNode.newid
+            self.name = "q" + next(XNode.id_iter)
 
     def __str__(self):
         return "XNODE" + self.point[0] + "," + self.point[1]
