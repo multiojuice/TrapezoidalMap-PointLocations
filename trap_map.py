@@ -189,6 +189,8 @@ class TrapMap:
                 # Whether we cut the section above the segment or not
                 cut_top = False
 
+                has_two_left_neightbors = cur_leaf.left_top != cur_leaf.left_bot
+
                 if prev_leaf.right_top != prev_leaf.right_bot:
 
                     # If there are two right neigbors of the previous leaf,
@@ -219,8 +221,29 @@ class TrapMap:
                     merge_top = Leaf(up=cur_leaf.up, down=segment,
                                      left=cur_leaf.left, right=None)
 
-                    # TODO link up old_merge_top etc.
+                    if has_two_left_neighbors:
+                        old_merge_top.right_top = merge_top
+                        old_merge_top.right_bot = merge_top
+
+                        merge_top.left_bot = old_merge_top
+                        merge_top.left_top = cur_leaf.left_top
+
+                        cur_leaf.left_top.right_top = merge_top
+                        cur_leaf.left_top.right_bot = merge_top
+                    else:
+                        old_merge_top.right_bot = merge_top
+                        old_merge_top.right_top = prev_leaf.right_top
+
+                        prev_leaf.right_top.left_bot = old_merge_top
+                        prev_leaf.right_top.left_top = old_merge_top
+
+                        merge_top.left_bot = old_merge_top
+                        merge_top.left_top = old_merge_top
+
+                # If we don't cut the top, we have to cut the bottom
                 else:
+
+                    assert prev_leaf.right_top == cur_leaf
 
                     # Mark the end of the bottom merge
                     merge_bot.right = cur_leaf.left
@@ -232,7 +255,27 @@ class TrapMap:
                     merge_bot = Leaf(up=segment, down=cur_leaf.down,
                                      left=cur_leaf.left, right=None)
 
-                    # TODO link up old_merge_bot etc.
+                    if has_two_left_neighbors:
+                        old_merge_bot.right_top = merge_bot
+                        old_merge_bot.right_bot = merge_bot
+
+                        merge_bot.left_top = old_merge_bot
+                        merge_bot.left_bot = cur_leaf.left_bot
+
+                        cur_leaf.left_bot.right_top = merge_bot
+                        cur_leaf.left_bot.right_bot = merge_bot
+                        assert merge_bot.left_bot is not None
+
+                    else:
+
+                        old_merge_bot.right_top = merge_bot
+                        old_merge_bot.right_bot = prev_leaf.right_bot
+
+                        prev_leaf.right_bot.left_bot = old_merge_bot
+                        prev_leaf.right_bot.left_top = old_merge_bot
+
+                        merge_bot.left_top = old_merge_bot
+                        merge_bot.left_bot = old_merge_bot
 
 
                 # Now that we've merged/cut, jump out if we are at the end
