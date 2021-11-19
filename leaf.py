@@ -13,6 +13,7 @@ class Leaf:
         self.left_bot = None
         self.right_top = None
         self.right_bot = None
+        self.name = "a trap"
 
 
     def __eq__(self, other):

@@ -9,26 +9,36 @@ Construction of Trapezoidal Map
 Authors: Daria Chaplin, Owen Sullivan, Collin Tod
 """
 
-
+# x_number_counter = 0
+# y_number_counter = 0
+# t_number_counter = 0
+#
+#
 def generateMatrix(root):
     dic = {}
+    traverse_tree(root, dic)
+    print(dic)
 
 
+def traverse_tree(root, dic):
+    if type(root) is XNode:
+        if root.name not in dic:
+            dic[root.name] = [root.left.name, root.right.name]
+        else:
+            dic[root.name].append(root.left.name)
+            dic[root.name].append(root.right.name)
 
-def traverseTree(root, dic):
-    if type(root) is Leaf:
-        print("thing")
+        traverse_tree(root.right, dic)
+        traverse_tree(root.left, dic)
+    elif type(root) is XNode:
+        if root.name not in dic:
+            dic[root.name] = [root.up.name, root.down.name]
+        else:
+            dic[root.name].append(root.up.name)
+            dic[root.name].append(root.down.name)
 
-
-
-
-
-
-
-
-
-
-
+        traverse_tree(root.up, dic)
+        traverse_tree(root.doen, dic)
 
 def main():
     fp = open(sys.argv[1])

@@ -1,11 +1,18 @@
 from leaf import Leaf
-# TODO implement __str__
+import itertools
+
 class XNode:
-    def __init__(self, point):
+    newid = itertools.count().next
+    def __init__(self, point, isP = True):
         self.point = point
-        self.parents=[]
+        self.parents = []
         self.left = None
         self.right = None
+
+        if isP:
+            self.name = "p" + XNode.newid
+        else:
+            self.name = "q" + XNode.newid
 
     def __str__(self):
         return "XNODE" + self.point[0] + "," + self.point[1]
