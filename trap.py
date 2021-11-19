@@ -147,7 +147,7 @@ def main():
 
     # Build trapezoidal map with randomized incremental algorithm
     trap_map = TrapMap(line_segments, ll_bound, ur_bound)
-    generateMatrix(trap_map.root)
+    trap_map_name = generateMatrix(trap_map.root)
 
 
     # Accept user-input points and print map traversal
@@ -163,7 +163,7 @@ def main():
         # split then cast the user's input
         x, y = map(int, user_input.split(" "))
 
-        print(trap_map.path_to((x, y)))
+        print(list(map((lambda x: x.name), trap_map.path_to((x, y)))))
 
 
 if __name__ == "__main__":
