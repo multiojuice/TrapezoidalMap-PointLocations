@@ -65,10 +65,12 @@ class Leaf:
             return self.right_top
 
 
-    def swap_on_left(self, leaf: Leaf):
+    def swap_on_left(self, leaf):
         """
         Replaces the left references to self with leaf
         """
+
+        assert isinstance(leaf, Leaf)
         if self.left_top.right_top == self:
             self.left_top.right_top = leaf
 
@@ -81,10 +83,12 @@ class Leaf:
         if self.left_bot.right_bot == self:
             self.left_bot.right_bot = leaf
 
-    def swap_on_right(self, leaf: Leaf):
+    def swap_on_right(self, leaf):
         """
         Replaces the right references to self with leaf
         """
+
+        assert isinstance(leaf, Leaf)
         if self.right_top.left_top == self:
             self.right_top.left_top = leaf
 

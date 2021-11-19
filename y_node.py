@@ -52,7 +52,7 @@ class YNode:
         seg_y_at_x = self.slope * x + self.y_intercept
 
         if seg_y_at_x < y:
-            return up.locate(point)
+            return self.up
         else:
-            return down.locate(point)
+            return self.down
 
