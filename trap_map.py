@@ -62,6 +62,8 @@ class TrapMap:
 
     def insert_segment(self, segment):
 
+        current_id = 999
+
         assert self.root is not None
 
         p1, p2 = segment
@@ -108,12 +110,13 @@ class TrapMap:
             bot_leaf.left_bot = left_leaf
 
             # Constructs the new subtree that this leaf turns into
-            sub_root = XNode(p1)
+            sub_root = XNode(p1, True)
             sub_root.attach_left(left_leaf)
 
-            other_point_node = XNode(p2)
+            other_point_node = XNode(p2, False)
+            current_id = int(other_point_node.name[1:])
 
-            segment_node = YNode(segment)
+            segment_node = YNode(segment, current_id)
             segment_node.attach_up(top_leaf)
             segment_node.attach_down(bot_leaf)
 
@@ -171,10 +174,12 @@ class TrapMap:
             merge_bot.left_bot = leaf_leftmost
 
             # Constructs the new subtree rooted at left_endpoint_split
-            left_endpoint_split = XNode(p1)
+            left_endpoint_split = XNode(p1, True)
             left_endpoint_split.attach_left(leaf_leftmost)
 
-            left_segment_split = YNode(segment)
+            current_id = int(left_endpoint_split.name[1:])
+
+            left_segment_split = YNode(segment, current_id)
             left_segment_split.attach_up(merge_top)
             left_segment_split.attach_down(merge_bot)
 
@@ -289,7 +294,7 @@ class TrapMap:
 
 
                 # Constructs and inserts the new subgraph
-                seg_split = YNode(segment)
+                seg_split = YNode(segment, current_id)
                 seg_split.attach_up(merge_top)
                 seg_split.attach_down(merge_bot)
                 cur_leaf.replace_with(seg_split)
@@ -322,9 +327,12 @@ class TrapMap:
             merge_bot.right_bot = leaf_rightmost
 
             # Constructs the subgraph and inserts it into the tree
-            right_endpoint_split = XNode(p2)
+            right_endpoint_split = XNode(p2, False)
             right_endpoint_split.attach_right(leaf_rightmost)
-            right_seg_split = YNode(segment)
+
+            current_id = int(right_endpoint_split.name[1:])
+
+            right_seg_split = YNode(segment, current_id)
             right_seg_split.attach_up(merge_top)
             right_seg_split.attach_down(merge_bot)
             right_endpoint_split.attach_left(right_seg_split)

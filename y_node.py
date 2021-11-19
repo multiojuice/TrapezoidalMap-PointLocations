@@ -4,9 +4,9 @@ import itertools
 class YNode:
     id_iter = itertools.count()
 
-    def __init__(self, segment):
+    def __init__(self, segment, id_num):
         self.segment = segment
-        self.name = "s" + str(next(YNode.id_iter))
+        self.name = "s" + str(id_num)
 
         # Do calculations needed later for testing if points are above or below
         # this line segment

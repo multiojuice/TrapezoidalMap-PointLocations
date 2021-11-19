@@ -1,6 +1,6 @@
 import sys
+import numpy as np
 from trap_map import TrapMap
-from leaf import Leaf
 from x_node import XNode
 from y_node import YNode
 
@@ -14,10 +14,92 @@ Authors: Daria Chaplin, Owen Sullivan, Collin Tod
 # t_number_counter = 0
 #
 #
+
+def ido(name, q_off, s_off, t_off, trap_name_map):
+
+    if name[0] == 't':
+        name = trap_name_map[name]
+
+    plain = int(name[1:])
+
+    if name[0] == 'q':
+        plain += q_off
+    if name[0] == 's':
+        plain += s_off
+    if name[0] == 't':
+        plain += t_off
+    return plain - 1
+
+
 def generateMatrix(root):
     dic = {}
     traverse_tree(root, dic)
     print(dic)
+
+    p_map = {}
+    q_map = {}
+    s_map = {}
+    t_map = {}
+
+    for key in dic.keys():
+        if key[0] == 'p':
+            p_map[key] = True
+        elif key[0] == 'q':
+            q_map[key] = True
+        elif key[0] == 's':
+            s_map[key] = True
+
+        for val in dic[key]:
+            if val[0] == 'p':
+                p_map[val] = True
+            elif val[0] == 'q':
+                q_map[val] = True
+            elif val[0] == 's':
+                s_map[val] = True
+            elif val[0] == 't':
+                t_map[val] = True
+
+    l_traps = list(t_map.keys())
+    parsed_traps = list((map(lambda x: int(x[1:]), l_traps)))
+    parsed_traps.sort()
+    sorted_traps = list(map(lambda y: "t" + str(y), parsed_traps));
+
+    trap_name_map = {}
+
+    for i in range(0, len(sorted_traps)):
+        trap_name_map[sorted_traps[i]] = "t" + str(i)
+
+    q_off = len(p_map)
+    s_off = q_off + len(q_map)
+    t_off = s_off + len(s_map)
+    total_size = t_off + len(t_map);
+
+    matrix = []
+
+    for i in range(total_size):
+        matrix.append([0] * total_size)
+
+    for key in dic.keys():
+        for val in dic[key]:
+            matrix[ido(key, q_off, s_off, t_off, trap_name_map)][ido(val, q_off, s_off, t_off, trap_name_map)] = 1
+
+    matrix.insert(0, [0])
+
+    counter = 1
+    for i in range(total_size):
+        num = i
+        letter = 'p'
+        if i > q_off:
+            letter = 'q'
+        if i > s_off:
+            letter = 's'
+        if i > t_off:
+            letter = 't'
+
+        matrix[0].append(letter + str(num))
+
+    return trap_name_map
+
 
 
 def traverse_tree(root, dic):
@@ -30,7 +112,7 @@ def traverse_tree(root, dic):
 
         traverse_tree(root.right, dic)
         traverse_tree(root.left, dic)
-    elif type(root) is XNode:
+    elif type(root) is YNode:
         if root.name not in dic:
             dic[root.name] = [root.up.name, root.down.name]
         else:
@@ -38,7 +120,7 @@ def traverse_tree(root, dic):
             dic[root.name].append(root.down.name)
 
         traverse_tree(root.up, dic)
-        traverse_tree(root.doen, dic)
+        traverse_tree(root.down, dic)
 
 def main():
     fp = open(sys.argv[1])
@@ -57,8 +139,9 @@ def main():
                 (coords[2], coords[3])))
 
     # Build trapezoidal map with randomized incremental algorithm
-    # FIXME: line_segments shouldn't only be the first element, remove slice once hard case is implemented
     trap_map = TrapMap(line_segments, ll_bound, ur_bound)
+    generateMatrix(trap_map.root)
+
 
     # Accept user-input points and print map traversal
     print("Trapezoidal map built.")

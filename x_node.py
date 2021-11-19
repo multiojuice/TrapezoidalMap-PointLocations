@@ -1,3 +1,5 @@
+import math
+
 from leaf import Leaf
 import itertools
 
@@ -10,9 +12,9 @@ class XNode:
         self.right = None
 
         if isP:
-            self.name = "p" + str(next(XNode.id_iter))
+            self.name = "p" + str(math.floor((next(XNode.id_iter) + 1) / 2))
         else:
-            self.name = "q" + str(next(XNode.id_iter))
+            self.name = "q" + str(math.floor((next(XNode.id_iter) + 1) / 2))
 
     def __str__(self):
         return "XNODE " + str(self.point[0]) + "," + str(self.point[1])

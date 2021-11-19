@@ -1,4 +1,7 @@
+import itertools
+
 class Leaf:
+    id_iter = itertools.count()
     def __init__(self, up, down, right, left):
         self.up = up
         self.down = down
@@ -10,7 +13,7 @@ class Leaf:
         self.left_bot = None
         self.right_top = None
         self.right_bot = None
-        self.name = "a trap"
+        self.name = "t" + str(next(Leaf.id_iter))
 
 
     def __eq__(self, other):
