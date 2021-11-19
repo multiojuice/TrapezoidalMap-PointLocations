@@ -21,15 +21,17 @@ class YNode:
         self.parents = []
 
     def __str__(self):
-        return "YNODE" + self.segment[0][0] + "," + self.segment[0][1] + "+" + self.point[1][0] + "," + self.point[1][1]
+        return "YNODE " + str(self.segment[0][0]) + "," + str(self.segment[0][1]) + "+" + str(self.segment[1][0]) + "," + str(self.segment[1][1])
 
     def attach_up(self, node):
+        assert node is not None
+        node.parents.append(self)
         self.up = node
-        self.up.parents.append(self)
 
     def attach_down(self, node):
+        assert node is not None
+        node.parents.append(self)
         self.down = node
-        self.down.parents.append(self)
 
     def replace_child(self, old, new):
 
@@ -39,9 +41,9 @@ class YNode:
         # Should be a child
         assert old in (self.up, self.down)
         
-        if isinstance(self.up, Leaf) and self.up == self.old:
+        if isinstance(self.up, Leaf) and self.up == old:
             self.attach_up(new)
-        elif isinstance(self.down, Leaf) and self.down == self.old:
+        elif isinstance(self.down, Leaf) and self.down == old:
             self.attach_down(new)
 
     def next(self, point):
