@@ -122,6 +122,11 @@ class TrapMap:
 
             sub_root.attach_right(other_point_node)
 
+            assert sub_root.right is not None
+            assert sub_root.left is not None
+            assert other_point_node.right is not None
+            assert other_point_node.left is not None
+
             # If the leaf is root, it doesn't have any parents and thus the
             # root reference itself should be swapped
             if leaf1 == self.root:
@@ -173,6 +178,7 @@ class TrapMap:
             left_segment_split.attach_up(merge_top)
             left_segment_split.attach_down(merge_bot)
 
+            left_endpoint_split.attach_right(left_segment_split)
             # Replaces leaf_begin with left_endpoint_split in the tree
             leaf_begin.replace_with(left_endpoint_split)
 
