@@ -52,8 +52,6 @@ class XNode:
         Returns the next node in the path to this point's location.
         """
 
-        if self.right is None:
-            print(self, "right is none")
         assert self.right is not None
         assert self.left is not None
 

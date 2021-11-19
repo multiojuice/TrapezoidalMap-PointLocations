@@ -113,9 +113,5 @@ class Leaf:
         Goes through all its parents and replaces itself with the new node,
         then self will end up getting garbage collected
         """
-        print("Replacing", self, "in", list(map(str,self.parents)))
-
         for p in self.parents:
             p.replace_child(self, node)
-
-        print("Replacement complete")
