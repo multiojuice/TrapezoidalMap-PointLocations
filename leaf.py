@@ -1,6 +1,3 @@
-Point = tuple[float, float]
-Segment = tuple[Point, Point]
-
 class Leaf:
     def __init__(self, up, down, right, left):
         self.up = up
@@ -31,7 +28,7 @@ class Leaf:
     def __str__(self):
         return "Trap" + str(self.left[0]) + "," + str(self.left[1]) + "+" + str(self.right[0]) + "," + str(self.right[1])
 
-    def next_intersecting(self, seg: Segment):
+    def next_intersecting(self, seg):
         """
         Iff seg intersects self, then this finds the next leaf to the right of
         self that the segment also intersects

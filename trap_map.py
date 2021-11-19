@@ -2,12 +2,10 @@ from leaf import Leaf
 from x_node import XNode
 from y_node import YNode
 
-Point = tuple[float, float]
-Segment = tuple[Point, Point]
 
 class TrapMap:
 
-    def __init__(self, segments: list[Segment], ll_bound: Point, ur_bound: Point):
+    def __init__(self, segments, ll_bound, ur_bound):
         """
         Constructs a TrapMap using the segments in `segments`. 
         """
@@ -27,7 +25,7 @@ class TrapMap:
         for segment in segments:
             self.insert_segment(segment)
 
-    def locate(self, point: Point) -> Leaf:
+    def locate(self, point) -> Leaf:
         """
         Returns the leaf that represents the trapezoidal area that `point`
         would lie in
@@ -62,7 +60,7 @@ class TrapMap:
 
         return path
 
-    def insert_segment(self, segment: Segment):
+    def insert_segment(self, segment):
 
         assert self.root is not None
 

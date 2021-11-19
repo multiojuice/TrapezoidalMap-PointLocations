@@ -6,7 +6,7 @@ class YNode:
 
     def __init__(self, segment):
         self.segment = segment
-        self.name = "s" + next(YNode.id_iter)
+        self.name = "s" + str(next(YNode.id_iter))
 
         # Do calculations needed later for testing if points are above or below
         # this line segment
