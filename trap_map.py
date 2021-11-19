@@ -161,14 +161,21 @@ class TrapMap:
             leaf_begin.swap_on_left(leaf_leftmost)
 
             # Mark the merge leaves as having the leftmost leaf to their left
-            merge_top.left_top = leaf_begin
-            merge_top.left_bot = leaf_begin
-            merge_bot.left_top = leaf_begin
-            merge_bot.left_bot = leaf_begin
+            merge_top.left_top = leaf_leftmost
+            merge_top.left_bot = leaf_leftmost
+            merge_bot.left_top = leaf_leftmost
+            merge_bot.left_bot = leaf_leftmost
 
-            # TODO set up the tree structure for these new splits (note that
-            # begin_top and begin_bot may be merged with a trapezoid to the
-            # right
+            # Constructs the new subtree rooted at left_endpoint_split
+            left_endpoint_split = XNode(p1)
+            left_endpoint_split.attach_left(leaf_leftmost)
+            
+            left_segment_split = YNode(segment)
+            left_segment_split.attach_up(merge_top)
+            left_segment_split.attach_down(merge_bot)
+
+            # Replaces leaf_begin with left_endpoint_split in the tree
+            leaf_begin.replaceWith(left_endpoint_split)
 
             # We want the first leaf to be processed (if there is one) to be
             # the next intersecting leaf to the right of the beginning leaf
@@ -261,4 +268,12 @@ class TrapMap:
             merge_bot.right_top = leaf_rightmost
             merge_bot.right_bot = leaf_rightmost
 
-            # TODO construct the subgraph and expand it at leaf_end in the tree
+            # Constructs the subgraph and inserts it into the tree
+            right_endpoint_split = XNode(p2)
+            right_endpoint_split.atttach_right(leaf_rightmost)
+            right_seg_split = YNode(segment)
+            right_seg_split.attach_up(merge_top)
+            right_seg_split.attach_down(merge_bot)
+            right_endpoint_split.attach_left(right_seg_split)
+
+            leaf_end.replace_with(right_endpoint_split)
