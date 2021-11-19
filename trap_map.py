@@ -169,7 +169,7 @@ class TrapMap:
             # Constructs the new subtree rooted at left_endpoint_split
             left_endpoint_split = XNode(p1)
             left_endpoint_split.attach_left(leaf_leftmost)
-            
+
             left_segment_split = YNode(segment)
             left_segment_split.attach_up(merge_top)
             left_segment_split.attach_down(merge_bot)
@@ -236,7 +236,7 @@ class TrapMap:
 
 
                 # Now that we've merged/cut, jump out if we are at the end
-                if cur_leaf is leaf_end:
+                if cur_leaf == leaf_end:
                     break
 
 
@@ -246,11 +246,16 @@ class TrapMap:
                 seg_split.attach_down(merge_bot)
                 cur_leaf.replace_with(seg_split)
 
+                # Move onto the next trapezoid
+                prev_leaf = cur_leaf
+                cur_leaf = cur_leaf.next_intersecting(segment)
+
             leaf_rightmost = Leaf(up=leaf_end.up, down=leaf_end.down,
                                   left=p2, right=leaf_end.right)
 
             # Link up leaf rightmost with everything
             leaf_end.swap_right(leaf_rightmost)
+
             leaf_rightmost.right_top = leaf_end.right_top
             leaf_rightmost.right_bot = leaf_end.right_bot
             leaf_rightmost.left_top = merge_top

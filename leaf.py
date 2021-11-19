@@ -68,15 +68,33 @@ class Leaf:
         """
         Replaces the left references to self with leaf
         """
-        # TODO fill in this function
-        pass
+        if self.left_top.right_top == self:
+            self.left_top.right_top = leaf
+
+        if self.left_top.right_bot == self:
+            self.left_top.right_bot = leaf
+
+        if self.left_bot.right_top == self:
+            self.left_bot.right_top = leaf
+
+        if self.left_bot.right_bot == self:
+            self.left_bot.right_bot = leaf
 
     def swap_on_right(self, leaf: Leaf):
         """
         Replaces the right references to self with leaf
         """
-        # TODO fill in this function
-        pass
+        if self.right_top.left_top == self:
+            self.right_top.left_top = leaf
+
+        if self.right_top.left_bot == self:
+            self.right_top.left_bot = leaf
+
+        if self.right_bot.left_top == self:
+            self.right_bot.left_top = leaf
+
+        if self.right_bot.left_bot == self:
+            self.right_bot.left_bot = leaf
 
     def replace_with(self, node):
         """
