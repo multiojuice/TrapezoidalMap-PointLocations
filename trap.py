@@ -1,10 +1,34 @@
 import sys
 from trap_map import TrapMap
+from leaf import Leaf
+from x_node import XNode
+from y_node import YNode
 
 """
 Construction of Trapezoidal Map
 Authors: Daria Chaplin, Owen Sullivan, Collin Tod
 """
+
+
+def generateMatrix(root):
+    dic = {}
+
+
+
+def traverseTree(root, dic):
+    if type(root) is Leaf:
+        print("thing")
+
+
+
+
+
+
+
+
+
+
+
 
 def main():
     fp = open(sys.argv[1])

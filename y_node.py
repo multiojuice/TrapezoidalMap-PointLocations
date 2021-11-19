@@ -17,6 +17,9 @@ class YNode:
         self.down = None
         self.parents = []
 
+    def __str__(self):
+        return "YNODE" + self.segment[0][0] + "," + self.segment[0][1] + "+" + self.point[1][0] + "," + self.point[1][1]
+
     def attach_up(self, node):
         self.up = node
         self.up.parents.append(self)

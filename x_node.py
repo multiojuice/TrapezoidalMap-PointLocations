@@ -7,6 +7,9 @@ class XNode:
         self.left = None
         self.right = None
 
+    def __str__(self):
+        return "XNODE" + self.point[0] + "," + self.point[1]
+
     def attach_right(self, node):
         self.right = node
         self.right.parents.append(self)
