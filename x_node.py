@@ -12,9 +12,9 @@ class XNode:
         self.right = None
 
         if isP:
-            self.name = "p" + str(math.floor((next(XNode.id_iter) + 1) / 2))
+            self.name = "p" + str(math.floor((next(XNode.id_iter) + 2) / 2))
         else:
-            self.name = "q" + str(math.floor((next(XNode.id_iter) + 1) / 2))
+            self.name = "q" + str(math.floor((next(XNode.id_iter) + 2) / 2))
 
     def __str__(self):
         return "XNODE " + str(self.point[0]) + "," + str(self.point[1])

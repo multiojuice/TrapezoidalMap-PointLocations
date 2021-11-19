@@ -3,6 +3,7 @@ import numpy as np
 from trap_map import TrapMap
 from x_node import XNode
 from y_node import YNode
+import pprint
 
 """
 Construction of Trapezoidal Map
@@ -34,8 +35,6 @@ def ido(name, q_off, s_off, t_off, trap_name_map):
 def generateMatrix(root):
     dic = {}
     traverse_tree(root, dic)
-    print(dic)
-
     p_map = {}
     q_map = {}
     s_map = {}
@@ -81,25 +80,33 @@ def generateMatrix(root):
 
     for key in dic.keys():
         for val in dic[key]:
-            matrix[ido(key, q_off, s_off, t_off, trap_name_map)][ido(val, q_off, s_off, t_off, trap_name_map)] = 1
+            first = ido(key, q_off, s_off, t_off, trap_name_map)
+            second = ido(val, q_off, s_off, t_off, trap_name_map)
+
+            matrix[second][first] = 1
 
     matrix.insert(0, [0])
 
-    counter = 1
     for i in range(total_size):
         num = i
         letter = 'p'
-        if i > q_off:
-            letter = 'q'
-        if i > s_off:
-            letter = 's'
-        if i > t_off:
+        if i >= t_off:
+            num -= t_off
             letter = 't'
+        elif i >= s_off:
+            num -= s_off
+            letter = 's'
+        elif i >= q_off:
+            num -= q_off
+            letter = 'q'
 
-        matrix[0].append(letter + str(num))
+        matrix[0].append(letter + str(num + 1))
+        matrix[i + 1].insert(0, letter + str(num + 1))
+
+    for row in matrix:
+        print(row)
 
     return trap_name_map
-
 
 
 def traverse_tree(root, dic):
